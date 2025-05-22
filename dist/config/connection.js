@@ -1,16 +1,13 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connect = connect;
 exports.getDb = getDb;
-const mongodb_1 = require("mongodb");
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
+const { MongoClient } = require("mongodb");
+const dotenv = require("dotenv");
+dotenv.config();
 const uri = process.env.MONGODB_URI;
-const client = new mongodb_1.MongoClient(uri);
-let db = null;
+const client = new MongoClient(uri);
+let db;
 async function connect() {
     try {
         await client.connect();
