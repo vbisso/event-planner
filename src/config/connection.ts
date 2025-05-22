@@ -1,12 +1,13 @@
-import { MongoClient, Db } from "mongodb";
-import dotenv from "dotenv";
+const { MongoClient } = require("mongodb");
+import type { Db } from "mongodb";
+const dotenv = require("dotenv");
 
 dotenv.config();
 
 const uri: string = process.env.MONGODB_URI as string;
 const client = new MongoClient(uri);
 
-let db: Db | null = null;
+let db: Db;
 
 async function connect(): Promise<void> {
   try {
@@ -19,7 +20,7 @@ async function connect(): Promise<void> {
   }
 }
 
-function getDb(): Db {
+function getDb() {
   if (!db) {
     throw new Error("Database not connected");
   }
