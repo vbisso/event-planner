@@ -2,16 +2,15 @@
   "name": "event-planner",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "scripts": {
+    "prebuild": "ls -la node_modules/@types/ || echo 'No @types found' && npm list @types/node || echo 'types/node not found'",
     "build": "tsc",
     "start": "node dist/index.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "swagger": "node ./swagger.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
@@ -26,5 +25,8 @@
   "devDependencies": {
     "@types/mongodb": "^4.0.6",
     "ts-node-dev": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
