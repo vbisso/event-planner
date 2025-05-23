@@ -10,3 +10,21 @@ Content-Type: application/json
     "createdAt": "2025-05-15T00:00:00Z",
     "role": "admin"
 }
+###
+GET http://localhost:3000/users
+###
+GET https://event-planner-hb82.onrender.com/users
+###
+POST https://event-planner-hb82.onrender.com/users
+Content-Type: application/json
+
+{
+    "username": "shushiBisso2",
+    "email": "sushi@example2.com",
+    "password": "ab22c",
+    "firstName": "Sushi",
+    "lastName": "Bisso",
+    "createdAt": "2025-05-15T00:00:00Z",
+    "role": "admin"
+}
+###
