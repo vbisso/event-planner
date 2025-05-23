@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "prebuild": "ls -la node_modules/@types/ || echo 'No @types found' && npm list @types/node || echo 'types/node not found'",
+    "prebuild": "npm install && ls -la node_modules/@types/ && npm list @types/node",
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
