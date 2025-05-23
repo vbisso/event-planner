@@ -8,6 +8,6 @@ routes.get("/", (req: Request, res: Response) => {
 });
 
 routes.use("/users", usersRouter);
-// routes.use("/api-docs", swaggerRouter);
+routes.use("/api-docs", swaggerRouter);
 
 module.exports = routes;

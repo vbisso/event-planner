@@ -7,5 +7,5 @@ routes.get("/", (req, res) => {
     res.send("Welcome to Event Planner API");
 });
 routes.use("/users", usersRouter);
-// routes.use("/api-docs", swaggerRouter);
+routes.use("/api-docs", swaggerRouter);
 module.exports = routes;

@@ -7,8 +7,8 @@
     "prebuild": "npm install && ls -la node_modules/@types/ && npm list @types/node",
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "swagger": "node ./swagger.js",
+    "dev": "npm run swagger && ts-node-dev src/index.ts",
+    "swagger": "ts-node src/swagger.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -24,7 +24,8 @@
   },
   "devDependencies": {
     "@types/mongodb": "^4.0.6",
-    "ts-node-dev": "^2.0.0"
+    "ts-node-dev": "^2.0.0",
+    "swagger-autogen": "^2.23.7"
   },
   "engines": {
     "node": ">=18.0.0"
