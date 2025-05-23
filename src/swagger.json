@@ -5,11 +5,9 @@
     "description": "Event Planner project",
     "version": "1.0.0"
   },
-  "host": "https://event-planner-hb82.onrender.com/",
+  "host": "event-planner-hb82.onrender.com",
   "basePath": "/",
-  "schemes": [
-    "https"
-  ],
+  "schemes": ["https"],
   "paths": {
     "/": {
       "get": {
