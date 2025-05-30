@@ -1,10 +1,16 @@
 const usersRoute = require("express").Router();
-const { getAllUsers, addUser } = require("../controllers/users");
+const {
+  getAllUsers,
+  addUser,
+  getUserById,
+  updateUser,
+  deleteUser,
+} = require("../controllers/users");
 
 usersRoute.get("/", getAllUsers);
-usersRoute.get("/:id", getAllUsers); //for api-docs purpose, will be updated later
 usersRoute.post("/", addUser);
-usersRoute.put("/", getAllUsers); //for api-docs purpose, will be updated later
-usersRoute.delete("/", getAllUsers); //for api-docs purpose, will be updated later
+usersRoute.get("/:id", getUserById);
+usersRoute.put("/:id", updateUser);
+usersRoute.delete("/:id", deleteUser);
 
 module.exports = usersRoute;
