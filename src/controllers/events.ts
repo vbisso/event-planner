@@ -2,18 +2,41 @@ import { Request, Response } from "express";
 const { getDb } = require("../config/connection");
 const { ObjectId } = require("mongodb");
 
-const getAllEvents = async (req: Request, res: Response) => {
+const fetchAllEvents = async () => {
+  const db = getDb();
+  const events = await db.collection("events").find({}).toArray();
+  return events;
+};
+const getAllEvents = async (
+  req: Request,
+  res: Response,
+  renderView = false
+) => {
   try {
     const db = getDb();
     const events = await db.collection("events").find({}).toArray();
 
     if (!events || events.length === 0) {
+      if (renderView) {
+        return res.render("events", { events: [] }); // render empty
+      }
       return res.status(404).json({ message: "No events found" });
     }
 
-    res.json(events);
+    if (renderView) {
+      return res.render("events", { events });
+    } else {
+      return res.json(events);
+    }
   } catch (error) {
-    res.status(500).json({ message: "Failed to retrieve events", error });
+    if (renderView) {
+      return res
+        .status(500)
+        .render("error", { message: "Failed to retrieve events" });
+    }
+    return res
+      .status(500)
+      .json({ message: "Failed to retrieve events", error });
   }
 };
 

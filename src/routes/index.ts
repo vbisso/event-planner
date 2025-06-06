@@ -3,9 +3,11 @@ const routes = require("express").Router();
 const usersRouter = require("./users");
 const eventsRouter = require("./events");
 const swaggerRouter = require("./swagger");
+const authRouter = require("./auth");
 
+routes.use("/auth", authRouter);
 routes.get("/", (req: Request, res: Response) => {
-  res.send("Welcome to Event Planner API");
+  res.render("index", { user: req.user });
 });
 
 routes.use("/users", usersRouter);

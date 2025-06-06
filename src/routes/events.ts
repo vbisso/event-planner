@@ -1,4 +1,5 @@
 const eventsRoute = require("express").Router();
+import { Request, Response } from "express";
 const {
   getAllEvents,
   addEvent,
@@ -45,8 +46,10 @@ const customEventMessages = {
   "required.isPublic": "isPublic is required.",
   "boolean.isPublic": "isPublic must be true or false.",
 };
+eventsRoute.get("/", (req: Request, res: Response) =>
+  getAllEvents(req, res, true)
+);
 
-eventsRoute.get("/", getAllEvents);
 eventsRoute.get("/:id", getEventById);
 eventsRoute.post(
   "/",

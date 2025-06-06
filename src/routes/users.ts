@@ -35,7 +35,9 @@ const customUserMessages = {
   "in.role": "Role must be 'user' or 'admin'.",
 };
 
-usersRoute.get("/", getAllUsers);
+usersRoute.get("/", (req: Request, res: Response) =>
+  getAllUsers(req, res, true)
+); // Render users page
 usersRoute.post(
   "/",
   validate(userValidationRules, customUserMessages),
