@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Events List</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 2rem;
+        background: #f9f9f9;
+      }
+      .event-card {
+        background: white;
+        margin-bottom: 1.5rem;
+        padding: 1.5rem;
+        border-left: 6px solid #6c63ff;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/">Home</a>
+    <h1>Events</h1>
+    <% if (events && events.length > 0) { %> <% events.forEach(event => { %>
+    <div class="event-card">
+      <h2><%= event.title %></h2>
+      <p><%= event.description %></p>
+      <p><strong>Date:</strong> <%= new Date(event.date).toDateString() %></p>
+      <p><strong>Time:</strong> <%= event.time %></p>
+      <p><strong>Location:</strong> <%= event.location %></p>
+      <p><strong>Organizer:</strong> <%= event.organizer %></p>
+      <p><strong>Category:</strong> <%= event.category %></p>
+      <p><strong>Public:</strong> <%= event.isPublic ? "Yes" : "No" %></p>
+    </div>
+    <% }) %> <% } else { %>
+    <p>No events found.</p>
+    <% } %>
+  </body>
+</html>
