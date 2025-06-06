@@ -2,17 +2,30 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const { getDb } = require("../config/connection");
 const { ObjectId } = require("mongodb");
-const getAllUsers = async (req, res) => {
+const getAllUsers = async (req, res, renderView = false) => {
     try {
         const db = getDb();
         const users = await db.collection("users").find({}).toArray();
         if (!users || users.length === 0) {
+            if (renderView) {
+                return res.render("users", { users: [] });
+            }
             return res.status(404).json({ message: "No users found" });
         }
-        res.json(users);
+        if (renderView) {
+            return res.render("users", { users });
+        }
+        else {
+            return res.json(users);
+        }
     }
     catch (error) {
-        res.status(500).json({ message: "Failed to retrieve users", error });
+        if (renderView) {
+            return res
+                .status(500)
+                .render("error", { message: "Failed to retrieve users" });
+        }
+        return res.status(500).json({ message: "Failed to retrieve users", error });
     }
 };
 const addUser = async (req, res) => {

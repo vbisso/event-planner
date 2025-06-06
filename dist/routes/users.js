@@ -28,7 +28,7 @@ const customUserMessages = {
     "date.createdAt": "createdAt must be a valid date format.",
     "in.role": "Role must be 'user' or 'admin'.",
 };
-usersRoute.get("/", getAllUsers);
+usersRoute.get("/", (req, res) => getAllUsers(req, res, true)); // Render users page
 usersRoute.post("/", (0, validate_1.validate)(userValidationRules, customUserMessages), addUser);
 usersRoute.get("/:id", getUserById);
 usersRoute.put("/:id", (0, validate_1.validate)(userValidationRules, customUserMessages), updateUser);
