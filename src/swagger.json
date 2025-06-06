@@ -31,6 +31,16 @@
         }
       }
     },
+    "/auth/auth/google/callback": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/auth/logout": {
       "get": {
         "description": "",

@@ -8,13 +8,13 @@ authRouter.get(
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
-// authRouter.get(
-//   "/",
-//   passport.authenticate("google", { failureRedirect: "/" }),
-//   (req: Request, res: Response) => {
-//     res.redirect("/");
-//   }
-// );
+authRouter.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/" }),
+  (req: Request, res: Response) => {
+    res.redirect("/");
+  }
+);
 
 authRouter.get("/logout", (req: Request, res: Response, next: NextFunction) => {
   req.logout((err) => {

@@ -7,13 +7,9 @@ const express_1 = __importDefault(require("express"));
 const passport_1 = __importDefault(require("passport"));
 const authRouter = express_1.default.Router();
 authRouter.get("/", passport_1.default.authenticate("google", { scope: ["profile", "email"] }));
-// authRouter.get(
-//   "/",
-//   passport.authenticate("google", { failureRedirect: "/" }),
-//   (req: Request, res: Response) => {
-//     res.redirect("/");
-//   }
-// );
+authRouter.get("/auth/google/callback", passport_1.default.authenticate("google", { failureRedirect: "/" }), (req, res) => {
+    res.redirect("/");
+});
 authRouter.get("/logout", (req, res, next) => {
     req.logout((err) => {
         if (err)
