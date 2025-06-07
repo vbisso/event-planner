@@ -42,7 +42,7 @@
       }
     },
     "/auth/logout": {
-      "get": {
+      "post": {
         "description": "",
         "responses": {
           "default": {

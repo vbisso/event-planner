@@ -1,27 +1,23 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connect = connect;
-exports.getDb = getDb;
-const { MongoClient } = require("mongodb");
-const dotenv = require("dotenv");
-dotenv.config();
+const mongoose_1 = __importDefault(require("mongoose"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
-let db;
 async function connect() {
+    if (!uri) {
+        throw new Error("❌ MONGODB_URI is not defined in the environment variables.");
+    }
     try {
-        await client.connect();
-        db = client.db("eventPlannerDb");
-        console.log("Connected to MongoDB!");
+        await mongoose_1.default.connect(uri);
+        console.log("✅ Mongoose connected to MongoDB!");
     }
     catch (err) {
-        console.error("MongoDB connection error:", err);
+        console.error("❌ Mongoose connection error:", err);
         throw err;
     }
-}
-function getDb() {
-    if (!db) {
-        throw new Error("Database not connected");
-    }
-    return db;
 }

@@ -11,7 +11,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 app.use(session({
-    secret: process.env.SESSION_SECRET || "fallback_secret_for_dev",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
 }));

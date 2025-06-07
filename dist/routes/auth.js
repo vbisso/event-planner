@@ -6,22 +6,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const passport_1 = __importDefault(require("passport"));
 const authRouter = express_1.default.Router();
-authRouter.get("/", passport_1.default.authenticate("google", { scope: ["profile", "email"] }));
-authRouter.get("/auth/google/callback", passport_1.default.authenticate("google", { failureRedirect: "/" }), (req, res) => {
+authRouter.get("/google", passport_1.default.authenticate("google", { scope: ["profile", "email"] }));
+authRouter.get("/google/callback", passport_1.default.authenticate("google", { failureRedirect: "/" }), (req, res) => {
+    console.log("Callback hit");
     res.redirect("/");
 });
-authRouter.get("/logout", (req, res, next) => {
+authRouter.post("/logout", (req, res, next) => {
     req.logout((err) => {
         if (err)
             return next(err);
         res.redirect("/");
     });
 });
-// authRouter.get("/profile", (req: Request, res: Response) => {
-//   if (!req.user) {
-//     return res.redirect("/");
-//   }
-//   const user = req.user as { displayName: string; email?: string };
-//   res.render("profile", { user });
+// authRouter.get("/logout", (req: Request, res: Response, next: NextFunction) => {
+//   req.logout((err) => {
+//     if (err) return next(err);
+//     res.redirect("/");
+//   });
 // });
 module.exports = authRouter;

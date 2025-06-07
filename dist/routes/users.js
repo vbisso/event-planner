@@ -4,12 +4,9 @@ const usersRoute = require("express").Router();
 const { getAllUsers, addUser, getUserById, updateUser, deleteUser, } = require("../controllers/users");
 const validate_1 = require("../middleware/validate");
 const userValidationRules = {
-    username: "required|string|min:3",
+    displayName: "string",
     email: "required|email",
     password: "required|string|min:6",
-    firstName: "required|string",
-    lastName: "required|string",
-    createdAt: "date",
     role: "in:user,admin",
 };
 const customUserMessages = {
@@ -28,7 +25,7 @@ const customUserMessages = {
     "date.createdAt": "createdAt must be a valid date format.",
     "in.role": "Role must be 'user' or 'admin'.",
 };
-usersRoute.get("/", (req, res) => getAllUsers(req, res, true)); // Render users page
+usersRoute.get("/", (req, res) => getAllUsers(req, res)); // Render users page
 usersRoute.post("/", (0, validate_1.validate)(userValidationRules, customUserMessages), addUser);
 usersRoute.get("/:id", getUserById);
 usersRoute.put("/:id", (0, validate_1.validate)(userValidationRules, customUserMessages), updateUser);
