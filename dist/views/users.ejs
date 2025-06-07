@@ -52,16 +52,6 @@
         background-color: #d0d7de;
       }
 
-      .user-name {
-        font-weight: 600;
-        color: #34495e;
-      }
-
-      .user-email {
-        font-style: italic;
-        color: #7f8c8d;
-      }
-
       p.no-users {
         text-align: center;
         font-size: 1.2rem;
@@ -81,12 +71,7 @@
       <% } else { %>
       <ul>
         <% users.forEach(user => { %>
-        <li>
-          <span class="user-name"
-            ><%= user.name || user.username || "Unnamed user" %></span
-          >
-          <span class="user-email"><%= user.email || "No email" %></span>
-        </li>
+        <li><%= user.displayName %> - <%= user.email %></li>
         <% }) %>
       </ul>
       <% } %>
