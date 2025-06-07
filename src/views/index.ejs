@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
+    <title>Event Planner</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
@@ -14,9 +14,18 @@
         <a href="/events">Events</a>
       </p>
 
+      <% if (user) { %>
+      <div class="user-info">
+        <h2>Hello, <%= user.displayName %>!</h2>
+        <p>Email: <%= user.email %></p>
+        <form action="/auth/logout" method="POST">
+          <button type="submit" class="logout-btn">Logout</button>
+        </form>
+      </div>
+      <% } else { %>
       <div class="login-box">
         <h2>Login</h2>
-        <a class="google-btn" href="/auth">
+        <a class="google-btn" href="/auth/google">
           <img
             src="https://img.icons8.com/color/16/000000/google-logo.png"
             alt="Google Icon"
@@ -24,6 +33,7 @@
           Login with Google
         </a>
       </div>
+      <% } %>
     </div>
   </body>
 </html>

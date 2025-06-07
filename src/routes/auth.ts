@@ -4,32 +4,33 @@ import passport from "passport";
 const authRouter = express.Router();
 
 authRouter.get(
-  "/",
+  "/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
 authRouter.get(
-  "/auth/google/callback",
+  "/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
   (req: Request, res: Response) => {
+    console.log("Callback hit");
     res.redirect("/");
   }
 );
 
-authRouter.get("/logout", (req: Request, res: Response, next: NextFunction) => {
-  req.logout((err) => {
-    if (err) return next(err);
-    res.redirect("/");
-  });
-});
-
-// authRouter.get("/profile", (req: Request, res: Response) => {
-//   if (!req.user) {
-//     return res.redirect("/");
-//   }
-
-//   const user = req.user as { displayName: string; email?: string };
-//   res.render("profile", { user });
+authRouter.post(
+  "/logout",
+  (req: Request, res: Response, next: NextFunction) => {
+    req.logout((err) => {
+      if (err) return next(err);
+      res.redirect("/");
+    });
+  }
+);
+// authRouter.get("/logout", (req: Request, res: Response, next: NextFunction) => {
+//   req.logout((err) => {
+//     if (err) return next(err);
+//     res.redirect("/");
+//   });
 // });
 
 module.exports = authRouter;

@@ -1,30 +1,24 @@
-const { MongoClient } = require("mongodb");
-import type { Db } from "mongodb";
-const dotenv = require("dotenv");
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
 dotenv.config();
 
-const uri: string = process.env.MONGODB_URI as string;
-const client = new MongoClient(uri);
-
-let db: Db;
+const uri = process.env.MONGODB_URI;
 
 async function connect(): Promise<void> {
+  if (!uri) {
+    throw new Error(
+      "❌ MONGODB_URI is not defined in the environment variables."
+    );
+  }
+
   try {
-    await client.connect();
-    db = client.db("eventPlannerDb");
-    console.log("Connected to MongoDB!");
+    await mongoose.connect(uri);
+    console.log("✅ Mongoose connected to MongoDB!");
   } catch (err) {
-    console.error("MongoDB connection error:", err);
+    console.error("❌ Mongoose connection error:", err);
     throw err;
   }
 }
 
-function getDb() {
-  if (!db) {
-    throw new Error("Database not connected");
-  }
-  return db;
-}
-
-export { connect, getDb };
+export { connect };

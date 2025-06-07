@@ -9,12 +9,9 @@ const {
 import { validate } from "../middleware/validate";
 
 const userValidationRules = {
-  username: "required|string|min:3",
+  displayName: "string",
   email: "required|email",
   password: "required|string|min:6",
-  firstName: "required|string",
-  lastName: "required|string",
-  createdAt: "date",
   role: "in:user,admin",
 };
 
@@ -35,9 +32,7 @@ const customUserMessages = {
   "in.role": "Role must be 'user' or 'admin'.",
 };
 
-usersRoute.get("/", (req: Request, res: Response) =>
-  getAllUsers(req, res, true)
-); // Render users page
+usersRoute.get("/", (req: Request, res: Response) => getAllUsers(req, res)); // Render users page
 usersRoute.post(
   "/",
   validate(userValidationRules, customUserMessages),

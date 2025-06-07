@@ -46,9 +46,7 @@ const customEventMessages = {
   "required.isPublic": "isPublic is required.",
   "boolean.isPublic": "isPublic must be true or false.",
 };
-eventsRoute.get("/", (req: Request, res: Response) =>
-  getAllEvents(req, res, true)
-);
+eventsRoute.get("/", (req: Request, res: Response) => getAllEvents(req, res));
 
 eventsRoute.get("/:id", getEventById);
 eventsRoute.post(

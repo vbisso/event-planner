@@ -1,118 +1,74 @@
 import { Request, Response } from "express";
-const { getDb } = require("../config/connection");
-const { ObjectId } = require("mongodb");
+import User from "../models/user";
 
-const getAllUsers = async (req: Request, res: Response, renderView = false) => {
+export const getAllUsers = async (req: Request, res: Response) => {
   try {
-    const db = getDb();
-    const users = await db.collection("users").find({}).toArray();
-
-    if (!users || users.length === 0) {
-      if (renderView) {
-        return res.render("users", { users: [] });
-      }
-      return res.status(404).json({ message: "No users found" });
-    }
-
-    if (renderView) {
-      return res.render("users", { users });
-    } else {
-      return res.json(users);
-    }
-  } catch (error) {
-    if (renderView) {
-      return res
-        .status(500)
-        .render("error", { message: "Failed to retrieve users" });
-    }
-    return res.status(500).json({ message: "Failed to retrieve users", error });
+    const users = await User.find();
+    res.status(200).render("users", { users });
+  } catch (err) {
+    console.error("Error retrieving users:", err);
+    res.status(500).render("error", {
+      message: "Failed to load users",
+    });
   }
 };
 
 const addUser = async (req: Request, res: Response) => {
   try {
-    const db = getDb();
-    const { username, email, password, firstName, lastName, createdAt, role } =
-      req.body;
-
-    const result = await db.collection("users").insertOne({
-      username,
+    const { displayName, email, password } = req.body;
+    // Check if user already exists by email
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+    const newUser = new User({
+      displayName,
       email,
       password,
-      firstName,
-      lastName,
-      createdAt: createdAt || new Date(),
-      role: role || "user",
     });
-
-    res.status(201).json({
-      message: "User created successfully",
-      id: result.insertedId,
-    });
+    await newUser.save();
+    res.status(201).json({ message: "User created successfully" });
   } catch (error) {
     res.status(500).json({ message: "Failed to create user", error });
   }
 };
 
 const getUserById = async (req: Request, res: Response) => {
+  const id = req.params.id;
   try {
-    const db = getDb();
-    const id = new ObjectId(req.params.id);
-    const user = await db.collection("users").findOne({ _id: id });
-
+    const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
-    res.json(user);
+    res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ message: "Failed to retrieve user", error });
   }
 };
 
 const updateUser = async (req: Request, res: Response) => {
+  const { displayName, email, password } = req.body;
+  const id = req.params.id;
   try {
-    const db = getDb();
-    const id = new ObjectId(req.params.id);
-    const { username, email, password, firstName, lastName, createdAt, role } =
-      req.body;
-
-    const result = await db.collection("users").updateOne(
-      { _id: id },
-      {
-        $set: {
-          username,
-          email,
-          password,
-          firstName,
-          lastName,
-          createdAt,
-          role,
-        },
-      }
-    );
-
-    if (result.matchedCount === 0) {
+    const updatedUser = await User.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
-
-    res.status(200).json({ message: "User updated successfully" });
+    res.status(200).json(updatedUser);
   } catch (error) {
     res.status(500).json({ message: "Failed to update user", error });
   }
 };
 
 const deleteUser = async (req: Request, res: Response) => {
+  const id = req.params.id;
   try {
-    const db = getDb();
-    const id = new ObjectId(req.params.id);
-
-    const result = await db.collection("users").deleteOne({ _id: id });
-
-    if (result.deletedCount === 0) {
+    const deletedUser = await User.findByIdAndDelete(id);
+    if (!deletedUser) {
       return res.status(404).json({ message: "User not found" });
     }
-
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Failed to delete user", error });

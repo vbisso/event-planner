@@ -1,48 +1,18 @@
 import { Request, Response } from "express";
-const { getDb } = require("../config/connection");
-const { ObjectId } = require("mongodb");
 
-const fetchAllEvents = async () => {
-  const db = getDb();
-  const events = await db.collection("events").find({}).toArray();
-  return events;
-};
-const getAllEvents = async (
-  req: Request,
-  res: Response,
-  renderView = false
-) => {
+import Event from "../models/event";
+
+const getAllEvents = async (req: Request, res: Response) => {
   try {
-    const db = getDb();
-    const events = await db.collection("events").find({}).toArray();
-
-    if (!events || events.length === 0) {
-      if (renderView) {
-        return res.render("events", { events: [] }); // render empty
-      }
-      return res.status(404).json({ message: "No events found" });
-    }
-
-    if (renderView) {
-      return res.render("events", { events });
-    } else {
-      return res.json(events);
-    }
+    const events = await Event.find();
+    res.status(200).render("events", { events });
   } catch (error) {
-    if (renderView) {
-      return res
-        .status(500)
-        .render("error", { message: "Failed to retrieve events" });
-    }
-    return res
-      .status(500)
-      .json({ message: "Failed to retrieve events", error });
+    res.status(500).json({ message: "Failed to retrieve events", error });
   }
 };
 
 const addEvent = async (req: Request, res: Response) => {
   try {
-    const db = getDb();
     const {
       title,
       description,
@@ -53,8 +23,11 @@ const addEvent = async (req: Request, res: Response) => {
       category,
       isPublic,
     } = req.body;
-
-    const result = await db.collection("events").insertOne({
+    const existingEvent = await Event.findOne({ title });
+    if (existingEvent) {
+      return res.status(400).json({ message: "Event already exists" });
+    }
+    const newEvent = new Event({
       title,
       description,
       location,
@@ -64,68 +37,48 @@ const addEvent = async (req: Request, res: Response) => {
       category,
       isPublic,
     });
-
-    res.status(201).json({
-      message: "Event created successfully",
-      id: result.insertedId,
-    });
+    await newEvent.save();
+    res.status(201).json({ message: "Event created successfully" });
   } catch (error) {
     res.status(500).json({ message: "Failed to create event", error });
   }
 };
 
 const getEventById = async (req: Request, res: Response) => {
+  const id = req.params.id;
   try {
-    const db = getDb();
-    const id = new ObjectId(req.params.id);
-    const event = await db.collection("events").findOne({ _id: id });
-
+    const event = await Event.findById(id);
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
     }
-
-    res.json(event);
+    res.status(200).json(event);
   } catch (error) {
     res.status(500).json({ message: "Failed to retrieve event", error });
   }
 };
 
 const updateEvent = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const {
+    title,
+    description,
+    location,
+    date,
+    time,
+    organizer,
+    category,
+    isPublic,
+  } = req.body;
   try {
-    const db = getDb();
-    const id = new ObjectId(req.params.id);
-    const {
-      title,
-      description,
-      location,
-      date,
-      time,
-      organizer,
-      category,
-      isPublic,
-    } = req.body;
-
-    const result = await db.collection("events").updateOne(
-      { _id: id },
-      {
-        $set: {
-          title,
-          description,
-          location,
-          date,
-          time,
-          organizer,
-          category,
-          isPublic,
-        },
-      }
-    );
-
-    if (result.matchedCount === 0) {
+    const updatedEvent = await Event.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    if (!updatedEvent) {
       return res.status(404).json({ message: "Event not found" });
     }
-
-    res.status(200).json({ message: "Event updated successfully" });
+    res.status(200).json({
+      message: "Event updated successfully",
+    });
   } catch (error) {
     res.status(500).json({ message: "Failed to update event", error });
   }
@@ -133,15 +86,11 @@ const updateEvent = async (req: Request, res: Response) => {
 
 const deleteEvent = async (req: Request, res: Response) => {
   try {
-    const db = getDb();
-    const id = new ObjectId(req.params.id);
-
-    const result = await db.collection("events").deleteOne({ _id: id });
-
-    if (result.deletedCount === 0) {
+    const id = req.params.id;
+    const deletedEvent = await Event.findByIdAndDelete(id);
+    if (!deletedEvent) {
       return res.status(404).json({ message: "Event not found" });
     }
-
     res.status(200).json({ message: "Event deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Failed to delete event", error });
