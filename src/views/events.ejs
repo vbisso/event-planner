@@ -80,6 +80,20 @@
         color: #888;
         margin-bottom: 1rem;
       }
+       .google-btn,
+      .register-btn {
+        display: inline-flex;
+        align-items: center;
+        background-color: white;
+        border: 1px solid #ccc;
+        color: #444;
+        padding: 10px 16px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: all 0.2s ease;
+
+      }
 
       @media (max-width: 600px) {
         body {
@@ -99,16 +113,22 @@
 
     <% if (!user) { %>
     <p class="no-users">Please log in to view users.</p>
-    <div class="login-box">
-      <h2>Login</h2>
-      <a class="google-btn" href="/auth/google">
-        <img
-          src="https://img.icons8.com/color/16/000000/google-logo.png"
-          alt="Google Icon"
-        />
-        Login with Google
-      </a>
-    </div>
+        <h2>Login</h2>
+        <a class="google-btn" href="/auth/google">
+          <img
+            src="https://img.icons8.com/color/16/000000/google-logo.png"
+            alt="Google Icon"
+          />
+          Login with Google
+        </a>
+        <br />
+        <a class="register-btn" href="/login">Login with Email</a>
+
+        <br />
+        <a class="register-btn" href="/register"
+          >Don't have an account? Register</a
+        >
+      </div>
     <% } else if (events && events.length > 0) { %> <% events.forEach(event => {
     %>
     <div class="event-card">
