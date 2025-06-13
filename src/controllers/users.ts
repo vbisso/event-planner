@@ -1,10 +1,18 @@
 import { Request, Response } from "express";
 import User from "../models/user";
+import { Session } from "express-session";
 
-export const getAllUsers = async (req: Request, res: Response) => {
+interface CustomRequest extends Request {
+  session: Session & {
+    user?: { id: string; displayName: string; email: string };
+  };
+}
+
+export const getAllUsers = async (req: CustomRequest, res: Response) => {
   try {
+    const user = res.locals.user || null;
     const users = await User.find();
-    res.status(200).render("users", { users });
+    res.status(200).render("users", { users, user });
   } catch (err) {
     console.error("Error retrieving users:", err);
     res.status(500).render("error", {

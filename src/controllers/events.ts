@@ -1,11 +1,18 @@
 import { Request, Response } from "express";
-
 import Event from "../models/event";
+import { Session } from "express-session";
 
-const getAllEvents = async (req: Request, res: Response) => {
+interface CustomRequest extends Request {
+  session: Session & {
+    user?: { id: string; displayName: string; email: string };
+  };
+}
+
+const getAllEvents = async (req: CustomRequest, res: Response) => {
   try {
+    const user = res.locals.user || null;
     const events = await Event.find();
-    res.status(200).render("events", { events });
+    res.status(200).render("events", { events, user });
   } catch (error) {
     res.status(500).json({ message: "Failed to retrieve events", error });
   }

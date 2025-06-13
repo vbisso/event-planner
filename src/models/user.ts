@@ -1,11 +1,12 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, Schema, Types } from "mongoose";
 
 export interface IUser extends Document {
   googleId?: string; // optional for manual signups
   displayName: string;
   email: string;
-  password?: string; // for manual signups
+  password: string; // for manual signups
   role?: string;
+  _id: Types.ObjectId;
 }
 
 const userSchema = new Schema<IUser>({

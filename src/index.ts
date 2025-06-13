@@ -1,3 +1,5 @@
+import { Cookie } from "express-session";
+
 var express = require("express");
 
 const path = require("path");
@@ -8,6 +10,9 @@ const passport = require("passport");
 require("./config/passport");
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
@@ -18,6 +23,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 1 day
   })
 );
 
