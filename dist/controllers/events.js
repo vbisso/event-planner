@@ -6,8 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const event_1 = __importDefault(require("../models/event"));
 const getAllEvents = async (req, res) => {
     try {
+        const user = res.locals.user || null;
         const events = await event_1.default.find();
-        res.status(200).render("events", { events });
+        res.status(200).render("events", { events, user });
     }
     catch (error) {
         res.status(500).json({ message: "Failed to retrieve events", error });

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import User from "../models/user";
 import { Session } from "express-session";
+import bcrypt from "bcryptjs";
 
 interface CustomRequest extends Request {
   session: Session & {
@@ -29,10 +30,14 @@ const addUser = async (req: Request, res: Response) => {
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = new User({
       displayName,
       email,
-      password,
+      password: hashedPassword,
+      role: "user",
     });
     await newUser.save();
     res.status(201).json({ message: "User created successfully" });

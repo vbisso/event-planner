@@ -7,9 +7,26 @@
   },
   "host": "localhost:3000",
   "basePath": "/",
-  "schemes": [
-    "http"
+  "schemes": ["http"],
+  "security": [
+    {
+      "googleOAuth": ["openid", "email", "profile"]
+    }
   ],
+  "securityDefinitions": {
+    "googleOAuth": {
+      "type": "oauth2",
+      "flow": "implicit",
+      "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth",
+      "oauth2RedirectUrl": "http://localhost:3000/api-docs/oauth2-redirect.html",
+      "scopes": {
+        "openid": "Access your identity",
+        "email": "Access your email address",
+        "profile": "Access your basic profile info"
+      }
+    }
+  },
+
   "paths": {
     "/": {
       "get": {

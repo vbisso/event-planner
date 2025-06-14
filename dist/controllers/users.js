@@ -5,10 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllUsers = void 0;
 const user_1 = __importDefault(require("../models/user"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const getAllUsers = async (req, res) => {
     try {
+        const user = res.locals.user || null;
         const users = await user_1.default.find();
-        res.status(200).render("users", { users });
+        res.status(200).render("users", { users, user });
     }
     catch (err) {
         console.error("Error retrieving users:", err);
@@ -26,10 +28,13 @@ const addUser = async (req, res) => {
         if (existingUser) {
             return res.status(400).json({ message: "User already exists" });
         }
+        // Hash password
+        const hashedPassword = await bcryptjs_1.default.hash(password, 10);
         const newUser = new user_1.default({
             displayName,
             email,
-            password,
+            password: hashedPassword,
+            role: "user",
         });
         await newUser.save();
         res.status(201).json({ message: "User created successfully" });

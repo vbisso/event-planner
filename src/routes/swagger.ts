@@ -4,6 +4,15 @@ const swaggerDocument = require("../swagger.json");
 
 // swaggerRoute.use("/api-docs", swaggerUi.serve);
 // swaggerRoute.get("/api-docs", swaggerUi.setup(swaggerDocument));
-swaggerRoute.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// swaggerRoute.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+swaggerRoute.use(
+  "/",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, {
+    swaggerOptions: {
+      oauth2RedirectUrl: "http://localhost:3000/api-docs/oauth2-redirect.html",
+    },
+  })
+);
 
 module.exports = swaggerRoute;
