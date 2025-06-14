@@ -10,7 +10,8 @@ swaggerRoute.use(
   swaggerUi.serve,
   swaggerUi.setup(swaggerDocument, {
     swaggerOptions: {
-      oauth2RedirectUrl: "http://localhost:3000/api-docs/oauth2-redirect.html",
+      oauth2RedirectUrl:
+        "https://event-planner-hb82.onrender.com/api-docs/oauth2-redirect.html",
     },
   })
 );
